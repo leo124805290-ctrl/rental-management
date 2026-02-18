@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Property {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  floors    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rooms       Room[]
+  payments    Payment[]
+  maintenance Maintenance[]
+
+  @@map("properties")
+}
+
+model Room {
+  id           String     @id @default(cuid())
+  propertyId   String
+  property     Property   @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomNumber   String
+  floor        Int
+  monthlyRent  Int
+  deposit      Int
+  status       RoomStatus @default(AVAILABLE)
+  tenantName   String?
+  tenantPhone  String?
+  moveInDate   DateTime?
+  contractEnd  DateTime?
+  currentMeter Int?
+  previousMeter Int?
+  lastMeter    Int?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  payments    Payment[]
+  maintenance Maintenance[]
+
+  @@unique([propertyId, roomNumber])
+  @@map("rooms")
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+}
+
+model Payment {
+  id              String       @id @default(cuid())
+  propertyId      String
+  property        Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomId          String
+  room            Room         @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  month           String
+  rentAmount      Int
+  electricityUsage Int
+  electricityFee  Int
+  totalAmount     Int
+  dueDate         DateTime
+  paidDate        DateTime?
+  status          PaymentStatus @default(PENDING)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+model Maintenance {
+  id          String            @id @default(cuid())
+  propertyId  String
+  property    Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  roomId      String
+  room        Room              @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  urgency     MaintenanceUrgency
+  status      MaintenanceStatus @default(PENDING)
+  cost        Int?
+  reportDate  DateTime          @default(now())
+  repairDate  DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@map("maintenance")
+}
+
+enum MaintenanceUrgency {
+  URGENT
+  NORMAL
+}
+
+enum MaintenanceStatus {
+  PENDING
+  ASSIGNED
+  COMPLETED
+}
