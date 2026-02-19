@@ -1,0 +1,18 @@
+[
+  {
+    "ts": 1771393560766,
+    "fingerprint": "0a3b8ba8151a23e8ff09764ff4df0ab60f0fd572696d7113a1c1441e1cc87922",
+    "cached": false,
+    "model": "deepseek-chat",
+    "tokens": {
+      "prompt_tokens": 11,
+      "completion_tokens": 1,
+      "total_tokens": 12,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 11
+    }
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "regions": ["hkg1"],
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL database connection string"
+    },
+    "NEXTAUTH_SECRET": {
+      "description": "NextAuth.js secret key for encryption"
+    },
+    "NEXTAUTH_URL": {
+      "description": "The full URL of your Vercel deployment"
+    }
+  }
+}

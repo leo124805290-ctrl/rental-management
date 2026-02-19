@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>本地部署修復工具 - 房東管理平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #f0f6fc;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .status-alert {
+            background: rgba(218, 54, 51, 0.2);
+            border: 2px solid #da3633;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .status-alert h3 {
+            color: #da3633;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .steps {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .step {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .step:hover {
+            border-color: #58a6ff;
+            transform: translateY(-3px);
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        
+        .step h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #58a6ff;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #238636 0%, #2ea043 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(35, 134, 54, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f0f6fc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .btn-github {
+            background: #24292e;
+            color: white;
+            border: 1px solid #30363d;
+        }
+        
+        .btn-github:hover {
+            background: #30363d;
+            transform: translateY(-3px);
+        }
+        
+        .env-vars {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .env-vars h4 {
+            color: #58a6ff;
+            margin-bottom: 15px;
+        }
+        
+        .env-var {
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            border-left: 3px solid #58a6ff;
+        }
+        
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f0f6fc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .test-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-results {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .test-result-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-success {
+            background: rgba(35, 134, 54, 0.2);
+            border-left: 3px solid #2ea043;
+        }
+        
+        .test-failure {
+            background: rgba(218, 54, 51, 0.2);
+            border-left: 3px solid #da3633;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 本地部署修復工具</h1>
+            <p>房東管理平台 - 直接部署解決方案</p>
+        </div>
+        
+        <div class="status-alert">
+            <h3>⚠️ 檢測到部署問題</h3>
+            <p>快速登入頁面返回 404 錯誤，表示 Vercel 部署尚未完成。</p>
+            <p>請按照以下步驟修復部署問題。</p>
+        </div>
+        
+        <div class="steps">
+            <!-- 步驟 1 -->
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>登入 GitHub</h3>
+                <p>首先登入您的 GitHub 帳戶（帳號：leo124805290-ctrl）</p>
+                
+                <div class="button-group">
+                    <a href="https://github.com/login" target="_blank" class="btn btn-github">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        前往 GitHub 登入
+                    </a>
+                </div>
+                
+                <p><strong>登入資訊：</strong></p>
+                <ul style="margin: 10px 0 10px 20px; opacity: 0.9;">
+                    <li>帳號：<strong>leo124805290-ctrl</strong></li>
+                    <li>專案：<strong>rental-management</strong></li>
+                    <li>倉庫：<a href="https://github.com/leo124805290-ctrl/rental-management" style="color: #58a6ff;">github.com/leo124805290-ctrl/rental-management</a></li>
+                </ul>
+            </div>
+            
+            <!-- 步驟 2 -->
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>登入 Vercel</h3>
+                <p>使用 GitHub 帳戶登入 Vercel 部署平台</p>
+                
+                <div class="button-group">
+                    <a href="https://vercel.com/login" target="_blank" class="btn btn-primary">
+                        🚀 前往 Vercel 登入
+                    </a>
+                </div>
+                
+                <p><strong>登入方式：</strong></p>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    1. 點擊 "Continue with GitHub"<br>
+                    2. 授權 Vercel 存取您的 GitHub 帳戶<br>
+                    3. 完成後自動跳轉到 Vercel 控制台
+                </div>
+            </div>
+            
+            <!-- 步驟 3 -->
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>設定環境變數</h3>
+                <p>這是讓網站正常運作的關鍵步驟！</p>
+                
+                <div class="button-group">
+                    <a href="https://vercel.com/leo124805290s-projects/rental-management/settings/environment-variables" target="_blank" class="btn btn-secondary">
+                        🔧 前往設定環境變數
+                    </a>
+                </div>
+                
+                <div class="env-vars">
+                    <h4>📋 需要設定的環境變數：</h4>
+                    
+                    <div class="env-var">
+                        <strong>DATABASE_URL</strong><br>
+                        postgresql://dummy:dummy@localhost:5432/dummy
+                        <button class="copy-btn" onclick="copyEnvVar('DATABASE_URL', 'postgresql://dummy:dummy@localhost:5432/dummy')">複製</button>
+                    </div>
+                    
+                    <div class="env-var">
+                        <strong>NEXTAUTH_SECRET</strong><br>
+                        OOBTn2EZJRZPTti7bXk5L+RiDeFN2s0OrKdHE9jK1cY=
+                        <button class="copy-btn" onclick="copyEnvVar('NEXTAUTH_SECRET', 'OOBTn2EZJRZPTti7bXk5L+RiDeFN2s0OrKdHE9jK1cY=')">複製</button>
+                    </div>
+                    
+                    <div class="env-var">
+                        <strong>NEXTAUTH_URL</strong><br>
+                        https://rental-management-virid.vercel.app
+                        <button class="copy-btn" onclick="copyEnvVar('NEXTAUTH_URL', 'https://rental-management-virid.vercel.app')">複製</button>
+                    </div>
+                    
+                    <div class="env-var">
+                        <strong>NODE_ENV</strong><br>
+                        production
+                        <button class="copy-btn" onclick="copyEnvVar('NODE_ENV', 'production')">複製</button>
+                    </div>
+                </div>
+                
+                <p><strong>操作步驟：</strong></p>
+                <ol style="margin: 15px 0 15px 20px; opacity: 0.9;">
+                    <li>點擊 "Add New" 按鈕</li>
+                    <li>在 "Name" 欄位貼上變數名稱</li>
+                    <li>在 "Value" 欄位貼上對應的值</li>
+                    <li>選擇 "Production" 環境</li>
+                    <li>點擊 "Save" 儲存</li>
+                    <li>重複以上步驟設定所有 4 個變數</li>
+                </ol>
+            </div>
+            
+            <!-- 步驟 4 -->
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>觸發重新部署</h3>
+                <p>設定完成後，手動觸發重新部署</p>
+                
+                <div class="button-group">
+                    <a href="https://vercel.com/leo124805290s-projects/rental-management/deployments" target="_blank" class="btn btn-primary">
+                        🔄 前往部署頁面
+                    </a>
+                </div>
+                
+                <p><strong>部署步驟：</strong></p>
+                <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    1. 前往 "Deployments" 頁面<br>
+                    2. 找到最新的部署記錄<br>
+                    3. 點擊右側的 "⋯" 更多選項<br>
+                    4. 選擇 "Redeploy"<br>
+                    5. 等待部署完成（約 1-2 分鐘）
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3 style="color: #58a6ff; margin-bottom: 20px;">🧪 測試部署狀態</h3>
+            
+            <div class="button-group">
+                <button class="btn btn-secondary" onclick="testDeployment()">
+                    測試網站狀態
+                </button>
+                
+                <button class="btn btn-secondary" onclick="clearCacheTips()">
+                    清除緩存提示
+                </button>
+            </div>
+            
+            <div id="test-results" class="test-results">
+                <h4>測試結果：</h4>
+                <div id="test-output"></div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; padding: 20px; background: rgba(255, 215, 0, 0.1); border: 2px solid #ffd700; border-radius:
