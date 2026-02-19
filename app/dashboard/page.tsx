@@ -1,7 +1,7 @@
 import { Building2, Users, DollarSign, Wrench, Calendar, TrendingUp } from 'lucide-react'
-import StatCard from '@/components/StatCard'
-import RecentActivity from '@/components/RecentActivity'
-import RevenueChart from '@/components/RevenueChart'
+import StatCard from '../../components/StatCard'
+import RecentActivity from '../../components/RecentActivity'
+import RevenueChart from '../../components/RevenueChart'
 
 export default function DashboardPage() {
   const stats = [
@@ -10,42 +10,42 @@ export default function DashboardPage() {
       value: '8',
       change: '+2',
       icon: Building2,
-      color: 'blue',
+      color: 'blue' as const,
     },
     {
       title: '現住租客',
       value: '24',
       change: '+3',
       icon: Users,
-      color: 'green',
+      color: 'green' as const,
     },
     {
       title: '本月收入',
       value: 'NT$ 256,800',
       change: '+12%',
       icon: DollarSign,
-      color: 'purple',
+      color: 'purple' as const,
     },
     {
       title: '待處理報修',
       value: '5',
       change: '-2',
       icon: Wrench,
-      color: 'orange',
+      color: 'orange' as const,
     },
     {
       title: '即將到期租約',
       value: '3',
       change: '0',
       icon: Calendar,
-      color: 'red',
+      color: 'red' as const,
     },
     {
       title: '入住率',
       value: '92%',
       change: '+4%',
       icon: TrendingUp,
-      color: 'teal',
+      color: 'teal' as const,
     },
   ]
 
