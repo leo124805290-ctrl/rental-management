@@ -6,8 +6,6 @@ const nextConfig = {
       enabled: true,
     },
   },
-  // 明確禁用 Turbopack
-  turbo: false,
 }
 
 module.exports = nextConfig

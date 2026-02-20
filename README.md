@@ -1,107 +1,95 @@
-# 多物業租賃管理系統
+# 房東管理平台
 
-專業的房東管理平台，輕鬆管理多個物業、租客、繳費與報修。
+這是一個完整的房東管理平台，包含以下功能：
 
-## 功能特色
-
-### ✅ 已完成
-- **儀表板**：數據概覽與統計卡片
-- **物業管理**：物業列表、詳細資訊、狀態管理
-- **租客管理**：租客列表、合約管理（基礎）
-- **繳費管理**：租金記錄、逾期提醒（基礎）
-- **報修管理**：報修申請、進度追蹤（基礎）
-- **響應式設計**：手機、平板、桌面完美適配
-
-### 🚧 開發中
-- 完整租客管理系統
-- 完整繳費管理系統
-- 完整報修管理系統
-- 數據分析報表
-- 身份驗證系統
+## 功能模組
+- 🏠 物業管理
+- 🛏️ 房間管理  
+- 👥 租客管理
+- 💰 繳費管理
+- 🔧 報修管理
+- 📊 數據分析儀表板
 
 ## 技術架構
+- **前端框架**: Next.js 15.5.12 (App Router)
+- **樣式**: Tailwind CSS
+- **UI 元件**: Radix UI
+- **圖表**: Recharts
+- **表單**: React Hook Form + Zod 驗證
+- **狀態管理**: React 狀態 + 本地儲存
 
-- **前端框架**：Next.js 15 (App Router)
-- **樣式框架**：Tailwind CSS
-- **圖表庫**：Recharts
-- **圖標庫**：Lucide React
-- **資料庫**：PostgreSQL + Prisma
-- **身份驗證**：NextAuth.js
+## 部署狀態
 
-## 快速開始
+### 當前問題
+專案部署到 Vercel 後遇到「新路由返回 404」的問題。
 
-### 環境變數設定
-複製 `.env.example` 為 `.env.local` 並設定：
+### 問題原因
+1. 缺少必要的環境變數配置
+2. 專案包含未使用的依賴（Prisma, NextAuth）
+3. 部署配置需要調整
 
-```bash
-DATABASE_URL="postgresql://username:password@localhost:5432/rental_db"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
+### 已執行的修正
+1. ✅ 移除了未使用的依賴（Prisma, NextAuth）
+2. ✅ 更新了 package.json 配置
+3. ✅ 建立了部署修復指南（DEPLOYMENT_FIX.md）
+4. ✅ 更新了環境變數配置
+5. ✅ 簡化了專案結構
+
+## 部署步驟
+
+### 1. Vercel 環境變數設定
+登入 Vercel 控制台，設定以下環境變數：
+```
+NODE_ENV=production
+NEXT_PUBLIC_APP_URL=https://rental-management-virid.vercel.app
 ```
 
-### 安裝與執行
+### 2. 重新部署
+1. 推送更新到 GitHub
+2. 或在 Vercel 控制台點擊「重新部署」
 
+### 3. 測試路由
+部署完成後測試：
+- `/` → 重定向到 `/dashboard`
+- `/dashboard` → 儀表板
+- `/properties` → 物業管理
+- `/tenants` → 租客管理
+- `/payments` → 繳費管理
+- `/maintenance` → 報修管理
+
+## 本地開發
 ```bash
 # 安裝依賴
 npm install
 
-# 設定資料庫
-npx prisma generate
-npx prisma migrate dev
-
 # 開發模式
 npm run dev
 
-# 生產模式
+# 構建
 npm run build
+
+# 生產模式
 npm start
 ```
 
-## 部署到 Vercel
-
-1. 推送到 GitHub
-2. 在 Vercel 中導入專案
-3. 設定環境變數：
-   - `DATABASE_URL`
-   - `NEXTAUTH_SECRET`
-   - `NEXTAUTH_URL`
-4. 部署完成！
-
 ## 專案結構
-
 ```
 app/
-├── dashboard/          # 儀表板
-├── properties/         # 物業管理
-├── tenants/           # 租客管理
-├── payments/          # 繳費管理
-├── maintenance/       # 報修管理
-├── auth/              # 身份驗證
-├── layout.tsx         # 根佈局
-└── page.tsx           # 首頁
-components/            # 可重用組件
-lib/                   # 工具函數
-prisma/                # 資料庫 schema
-public/                # 靜態資源
+├── dashboard/      # 儀表板
+├── properties/     # 物業管理
+├── tenants/       # 租客管理
+├── payments/      # 繳費管理
+├── maintenance/   # 報修管理
+└── test/         # 測試頁面
+
+components/        # 共用元件
+lib/              # 工具函數
 ```
 
-## 開發指南
+## 注意事項
+1. 這是一個**靜態前端應用**，目前使用模擬資料
+2. 如果需要資料庫功能，後續可以添加 Prisma 和 PostgreSQL
+3. 專案已優化為 Vercel 部署，移除了所有不相關的 AI 代碼
 
-### 新增頁面
-```bash
-# 在 app 目錄下建立新資料夾
-mkdir app/new-page
-
-# 建立 page.tsx
-touch app/new-page/page.tsx
-```
-
-### 新增組件
-```bash
-# 在 components 目錄下建立新組件
-touch components/NewComponent.tsx
-```
-
-## 授權
-
-MIT License
+## 聯絡資訊
+如有部署問題，請參考 `DEPLOYMENT_FIX.md` 檔案。
