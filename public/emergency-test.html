@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>房東管理平台 - 緊急測試頁</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+        .header { background: #3B82F6; color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
+        .status { padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .success { background: #D1FAE5; color: #065F46; }
+        .error { background: #FEE2E2; color: #991B1B; }
+        .links a { display: inline-block; margin: 10px; padding: 12px 24px; background: #10B981; color: white; text-decoration: none; border-radius: 6px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>房東管理平台 - 部署修復測試</h1>
+        <p>如果看到此頁面，表示部署成功</p>
+    </div>
+    
+    <div class="status success">
+        <h3>✅ 部署狀態：成功</h3>
+        <p>時間: <span id="time"></span></p>
+    </div>
+    
+    <h2>測試連結：</h2>
+    <div class="links">
+        <a href="/quick-login">⚡ 快速登入</a>
+        <a href="/dashboard">📊 儀表板</a>
+        <a href="/login">🔐 傳統登入</a>
+        <a href="/properties">🏠 物業管理</a>
+        <a href="/tenants">👥 租客管理</a>
+    </div>
+    
+    <div style="margin-top: 40px; padding: 20px; background: #F3F4F6; border-radius: 8px;">
+        <h3>部署資訊：</h3>
+        <p>此為緊急測試頁面，用於驗證部署是否成功。</p>
+        <p>如果功能連結正常，表示修復成功。</p>
+    </div>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>
