@@ -25,7 +25,7 @@ const PUBLIC_ROUTES = [
   '/test'
 ]
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   
   // 檢查是否為保護路由
